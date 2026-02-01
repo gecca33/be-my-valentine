@@ -54,9 +54,9 @@
   }
 
   button {
-    padding: 12px 22px;
+    padding: 14px 26px;
     font-size: 16px;
-    border-radius: 12px;
+    border-radius: 14px;
     border: none;
     cursor: pointer;
   }
@@ -68,11 +68,12 @@
 
   #no {
     background: #ccc;
-    position: absolute;
+    position: fixed;
+    z-index: 5;
   }
 
-  /* ❤️ Падащи сърца */
-  .heart {
+  /* ❤️🌻🎉 падащи елементи */
+  .fall {
     position: fixed;
     top: -10px;
     animation: fall linear infinite;
@@ -82,7 +83,7 @@
 
   @keyframes fall {
     to {
-      transform: translateY(110vh);
+      transform: translateY(110vh) rotate(360deg);
     }
   }
 </style>
@@ -90,13 +91,13 @@
 
 <body>
 
-<!-- 🎵 Музика -->
+<!-- 🎵 музика -->
 <audio id="music" autoplay loop>
   <source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <div class="card">
-  <h1 id="title">💌 Ще бъдеш ли моята Валентинка, БЕБ??? 😽💖</h1>
+  <h1>💌 Ще бъдеш ли моята Валентинка, БЕБ??? 😽💖</h1>
 
   <div class="gallery">
     <img id="photo" src="photo1.jpg">
@@ -107,13 +108,13 @@
 </div>
 
 <script>
-  /* 🎵 autoplay fallback за мобилни */
+  /* 🎵 autoplay fallback */
   const music = document.getElementById("music");
   music.play().catch(() => {
     document.body.addEventListener("click", () => music.play(), { once: true });
   });
 
-  /* 📸 8 СНИМКИ */
+  /* 📸 8 снимки */
   const photos = [
     "photo1.jpg",
     "photo2.jpg",
@@ -126,69 +127,82 @@
   ];
 
   const noBtn = document.getElementById("no");
+  const img = document.getElementById("photo");
   let clicks = 0;
 
-  const specialTexts = {
+  const messages = {
     3: "Верно ли пак ще цъкнеш? 😳",
     5: "Усещам, че ме искаш за валентинка 😏",
     6: "Няма – НЕ 😈",
     8: "Цъкни ДА! 💖"
   };
 
+  function moveNoButton() {
+    const padding = 20;              // safe area
+    const btnWidth = noBtn.offsetWidth;
+    const btnHeight = noBtn.offsetHeight;
+
+    const maxX = window.innerWidth - btnWidth - padding;
+    const maxY = window.innerHeight - btnHeight - padding;
+
+    const x = Math.random() * maxX + padding;
+    const y = Math.random() * maxY + padding;
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+  }
+
   noBtn.addEventListener("click", () => {
     clicks++;
 
-    /* смяна на снимка */
     if (clicks <= photos.length) {
-      document.getElementById("photo").src = photos[clicks - 1];
+      img.src = photos[clicks - 1];
     }
 
-    /* местене на бутона */
-    const x = Math.random() * (window.innerWidth - 120);
-    const y = Math.random() * (window.innerHeight - 120);
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
+    moveNoButton();
 
-    /* специални моменти */
-    if (specialTexts[clicks]) {
-      noBtn.textContent = specialTexts[clicks];
+    if (messages[clicks]) {
+      noBtn.textContent = messages[clicks];
     }
 
-    /* уголемяване на 3-ти път */
     if (clicks === 3) {
       noBtn.style.transform = "scale(1.15)";
     } else {
       noBtn.style.transform = "scale(1)";
     }
 
-    /* след 8-мия път */
     if (clicks >= 8) {
       noBtn.disabled = true;
       noBtn.style.opacity = "0.6";
     }
   });
 
-  /* 💖 YES */
+  /* 💖 YES + GIF */
   document.getElementById("yes").addEventListener("click", () => {
     document.body.innerHTML = `
-      <h1 style="color:white; font-size:30px; padding:20px;">
-        💖 YESSS! 💖<br><br>
-        Ти вече си моята Валентинка, БЕБ 😽<br><br>
-        Обичам те безкрайно ❤️
-      </h1>
+      <div style="color:white; padding:20px;">
+        <h1 style="font-size:30px;">
+          💖 YESSS! 💖<br><br>
+          Ти вече си моята Валентинка, БЕБ 😽<br>
+          Обичам те безкрайно ❤️
+        </h1>
+        <img src="love.gif" style="width:220px; margin-top:20px;">
+      </div>
     `;
   });
 
-  /* ❤️ Падащи сърца */
+  /* ❤️🌻🎉 падащи елементи */
+  const emojis = ["❤️", "🌻", "🎉"];
+
   setInterval(() => {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "❤️";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.animationDuration = 3 + Math.random() * 5 + "s";
-    heart.style.fontSize = 14 + Math.random() * 26 + "px";
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 8000);
+    const el = document.createElement("div");
+    el.className = "fall";
+    el.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left = Math.random() * 100 + "vw";
+    el.style.fontSize = 18 + Math.random() * 26 + "px";
+    el.style.animationDuration = 4 + Math.random() * 4 + "s";
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 9000);
   }, 300);
 </script>
 
