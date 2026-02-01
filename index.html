@@ -118,23 +118,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // безопасно местене на НЕ, никога не излиза извън екрана
   function moveNoButton() {
-    const padding = 20;
-    const btnWidth = noBtn.offsetWidth;
-    const btnHeight = noBtn.offsetHeight;
+  const padding = 20;
+  const btnWidth = noBtn.offsetWidth;
+  const btnHeight = noBtn.offsetHeight;
+  const screenWidth = window.innerWidth;
+  const screenHeight = window.innerHeight;
 
-    // изчисляваме координатите така че бутонът да е в рамките на екрана
-    const maxX = window.innerWidth - btnWidth - padding;
-    const maxY = window.innerHeight - btnHeight - padding;
+  // текущи координати
+  const currentX = noBtn.offsetLeft;
+  const currentY = noBtn.offsetTop;
 
-    const x = Math.random() * (maxX - padding) + padding;
-    const y = Math.random() * (maxY - padding) + padding;
+  // максимално движение ±80px
+  const maxMove = 80;
 
-    noBtn.style.position = "absolute";
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
-    noBtn.style.zIndex = 9999;
-    noBtn.style.pointerEvents = "auto";
-  }
+  let x = currentX + (Math.random() * 2 * maxMove - maxMove);
+  let y = currentY + (Math.random() * 2 * maxMove - maxMove);
+
+  // гарантира, че бутонът остава в рамките на екрана
+  x = Math.min(Math.max(padding, x), screenWidth - btnWidth - padding);
+  y = Math.min(Math.max(padding, y), screenHeight - btnHeight - padding);
+
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+}
 
   // първоначално позициониране
   moveNoButton();
@@ -188,4 +194,5 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
+
 
