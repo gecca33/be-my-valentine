@@ -52,9 +52,6 @@ button {
 
 #no {
   background: #ccc;
-  position: fixed;
-  z-index: 20;
-  pointer-events: auto;
 }
 
 /* падащи елементи */
@@ -96,90 +93,94 @@ button {
 </div>
 
 <script>
-const music = document.getElementById("music");
-music.play().catch(() => {
-  document.body.addEventListener("click", () => music.play(), { once: true });
-});
+document.addEventListener("DOMContentLoaded", () => {
+  const music = document.getElementById("music");
+  music.play().catch(() => {
+    document.body.addEventListener("click", () => music.play(), { once: true });
+  });
 
-const photos = [
-  "photo1.jpg","photo2.jpg","photo3.jpg","photo4.jpg",
-  "photo5.jpg","photo6.jpg","photo7.jpg","photo8.jpg"
-];
+  const photos = [
+    "photo1.jpg","photo2.jpg","photo3.jpg","photo4.jpg",
+    "photo5.jpg","photo6.jpg","photo7.jpg","photo8.jpg"
+  ];
 
-const noBtn = document.getElementById("no");
-const yesBtn = document.getElementById("yes");
-const img = document.getElementById("photo");
-let clicks = 0;
+  const noBtn = document.getElementById("no");
+  const yesBtn = document.getElementById("yes");
+  const img = document.getElementById("photo");
+  let clicks = 0;
 
-const messages = {
-  3: "Верно ли пак ще цъкнеш? 😳",
-  5: "Усещам, че ме искаш за валентинка 😏",
-  6: "Няма – НЕ 😈",
-  8: "Цъкни ДА! 💖"
-};
+  const messages = {
+    3: "Верно ли пак ще цъкнеш? 😳",
+    5: "Усещам, че ме искаш за валентинка 😏",
+    6: "Няма – НЕ 😈",
+    8: "Цъкни ДА! 💖"
+  };
 
-// безопасно местене на НЕ
-function moveNoButton() {
-  const padding = 20;
-  const btnWidth = noBtn.offsetWidth;
-  const btnHeight = noBtn.offsetHeight;
+  // безопасно местене на НЕ
+  function moveNoButton() {
+    const padding = 20;
+    const btnWidth = noBtn.offsetWidth;
+    const btnHeight = noBtn.offsetHeight;
+    const maxX = window.innerWidth - btnWidth - padding;
+    const maxY = window.innerHeight - btnHeight - padding;
 
-  const maxX = window.innerWidth - btnWidth - padding;
-  const maxY = window.innerHeight - btnHeight - padding;
+    const x = Math.random() * maxX + padding;
+    const y = Math.random() * maxY + padding;
 
-  const x = Math.random() * maxX + padding;
-  const y = Math.random() * maxY + padding;
+    noBtn.style.position = "absolute";
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+    noBtn.style.zIndex = 9999;
+    noBtn.style.pointerEvents = "auto";
+  }
 
-  noBtn.style.left = x + "px";
-  noBtn.style.top = y + "px";
-}
-
-// клик на НЕ
-noBtn.addEventListener("click", () => {
-  clicks++;
-
-  if (clicks <= photos.length) img.src = photos[clicks - 1];
-
+  // първоначално позициониране на НЕ
   moveNoButton();
 
-  if (messages[clicks]) noBtn.textContent = messages[clicks];
+  // клик на НЕ
+  noBtn.addEventListener("click", () => {
+    clicks++;
+    if (clicks <= photos.length) img.src = photos[clicks - 1];
+    moveNoButton();
 
-  if (clicks === 3) noBtn.style.transform = "scale(1.15)";
-  else noBtn.style.transform = "scale(1)";
+    if (messages[clicks]) noBtn.textContent = messages[clicks];
 
-  if (clicks >= 8) {
-    noBtn.disabled = true;
-    noBtn.style.opacity = "0.6";
-    yesBtn.style.pointerEvents = "auto";
-    yesBtn.classList.add("pulse"); // включваме пулсиране на ДА
-  }
-});
+    if (clicks === 3) noBtn.style.transform = "scale(1.15)";
+    else noBtn.style.transform = "scale(1)";
 
-// клик на ДА
-yesBtn.addEventListener("click", () => {
-  document.body.innerHTML = `
-    <div style="color:white; padding:20px;">
-      <h1 style="font-size:30px;">
-        💖 YESSS! 💖<br><br>
-        Ти вече си моята Валентинка, БЕБ 😽<br>
-        Обичам те безкрайно ❤️
-      </h1>
-      <img src="love.gif" style="width:220px; margin-top:20px;">
-    </div>
-  `);
+    if (clicks >= 8) {
+      noBtn.disabled = true;
+      noBtn.style.opacity = "0.6";
+      yesBtn.style.pointerEvents = "auto";
+      yesBtn.classList.add("pulse");
+    }
+  });
 
-  // падащи елементи
-  const emojis = ["❤️","🌻","🎉"];
-  setInterval(() => {
-    const el = document.createElement("div");
-    el.className = "fall";
-    el.innerHTML = emojis[Math.floor(Math.random()*emojis.length)];
-    el.style.left = Math.random()*100+"vw";
-    el.style.fontSize = 18 + Math.random()*26 + "px";
-    el.style.animationDuration = 4 + Math.random()*4 + "s";
-    document.body.appendChild(el);
-    setTimeout(() => el.remove(),9000);
-  }, 300);
+  // клик на ДА
+  yesBtn.addEventListener("click", () => {
+    document.body.innerHTML = `
+      <div style="color:white; padding:20px;">
+        <h1 style="font-size:30px;">
+          💖 YESSS! 💖<br><br>
+          Ти вече си моята Валентинка, БЕБ 😽<br>
+          Обичам те безкрайно ❤️
+        </h1>
+        <img src="love.gif" style="width:220px; margin-top:20px;">
+      </div>
+    `;
+
+    const emojis = ["❤️","🌻","🎉"];
+    setInterval(() => {
+      const el = document.createElement("div");
+      el.className = "fall";
+      el.innerHTML = emojis[Math.floor(Math.random()*emojis.length)];
+      el.style.left = Math.random()*100+"vw";
+      el.style.fontSize = 18 + Math.random()*26 + "px";
+      el.style.animationDuration = 4 + Math.random()*4 + "s";
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(),9000);
+    }, 300);
+  });
 });
 </script>
 </body>
