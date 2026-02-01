@@ -6,72 +6,75 @@
 <title>💖 Валентинка 💖</title>
 
 <style>
-  * { box-sizing: border-box; font-family: "Poppins", sans-serif; }
+* { box-sizing: border-box; font-family: "Poppins", sans-serif; }
 
-  body {
-    margin: 0;
-    height: 100vh;
-    background: linear-gradient(135deg, #ff5f9e, #ff85b3);
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, #ff5f9e, #ff85b3);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
 
-  .card {
-    background: rgba(255,255,255,0.95);
-    width: 90%;
-    max-width: 360px;
-    padding: 25px;
-    border-radius: 25px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-    z-index: 2;
-    position: relative;
-  }
+.card {
+  background: rgba(255,255,255,0.95);
+  width: 90%;
+  max-width: 360px;
+  padding: 25px;
+  border-radius: 25px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+  z-index: 2;
+  position: relative;
+}
 
-  h1 { font-size: 22px; color: #333; margin-bottom: 15px; }
+h1 { font-size: 22px; color: #333; margin-bottom: 15px; }
 
-  .gallery {
-    width: 100%;
-    height: 220px;
-    border-radius: 15px;
-    overflow: hidden;
-    margin-bottom: 15px;
-  }
+.gallery { width: 100%; height: 220px; border-radius: 15px; overflow: hidden; margin-bottom: 15px; }
+.gallery img { width: 100%; height: 100%; object-fit: cover; }
 
-  .gallery img { width: 100%; height: 100%; object-fit: cover; }
+button {
+  padding: 14px 26px;
+  font-size: 16px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
 
-  button {
-    padding: 14px 26px;
-    font-size: 16px;
-    border-radius: 14px;
-    border: none;
-    cursor: pointer;
-  }
+#yes {
+  background: #ff4d6d;
+  color: white;
+  pointer-events: none; /* деактивиран до края на НЕ */
+}
 
-  #yes {
-    background: #ff4d6d;
-    color: white;
-    pointer-events: none; /* деактивиран първоначално */
-  }
+#no {
+  background: #ccc;
+  position: fixed;
+  z-index: 20;
+  pointer-events: auto;
+}
 
-  #no {
-    background: #ccc;
-    position: fixed;
-    z-index: 20; /* винаги над картата */
-    pointer-events: auto;
-  }
+/* падащи елементи */
+.fall {
+  position: fixed;
+  top: -10px;
+  animation: fall linear infinite;
+  z-index: 1;
+  pointer-events: none;
+}
 
-  .fall {
-    position: fixed;
-    top: -10px;
-    animation: fall linear infinite;
-    z-index: 1;
-    pointer-events: none;
-  }
+@keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
 
-  @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+/* пулсиране на ДА */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+.pulse { animation: pulse 1s infinite; }
 </style>
 </head>
 
@@ -115,7 +118,7 @@ const messages = {
   8: "Цъкни ДА! 💖"
 };
 
-// функция за безопасно местене на бутона
+// безопасно местене на НЕ
 function moveNoButton() {
   const padding = 20;
   const btnWidth = noBtn.offsetWidth;
@@ -147,7 +150,8 @@ noBtn.addEventListener("click", () => {
   if (clicks >= 8) {
     noBtn.disabled = true;
     noBtn.style.opacity = "0.6";
-    yesBtn.style.pointerEvents = "auto"; // активиране на ДА
+    yesBtn.style.pointerEvents = "auto";
+    yesBtn.classList.add("pulse"); // включваме пулсиране на ДА
   }
 });
 
@@ -178,6 +182,5 @@ yesBtn.addEventListener("click", () => {
   }, 300);
 });
 </script>
-
 </body>
 </html>
