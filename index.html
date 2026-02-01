@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💖 Валентинка 💖</title>
+
+<style>
+  * {
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ff5f9e, #ff85b3);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.95);
+    width: 90%;
+    max-width: 360px;
+    padding: 25px;
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    z-index: 2;
+    position: relative;
+  }
+
+  h1 {
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 15px;
+  }
+
+  .gallery {
+    width: 100%;
+    height: 220px;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 15px;
+  }
+
+  .gallery img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  button {
+    padding: 12px 22px;
+    font-size: 16px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+  }
+
+  #yes {
+    background: #ff4d6d;
+    color: white;
+  }
+
+  #no {
+    background: #ccc;
+    position: absolute;
+  }
+
+  /* ❤️ Падащи сърца */
+  .heart {
+    position: fixed;
+    top: -10px;
+    animation: fall linear infinite;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  @keyframes fall {
+    to {
+      transform: translateY(110vh);
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- 🎵 Музика -->
+<audio id="music" autoplay loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<div class="card">
+  <h1 id="title">💌 Ще бъдеш ли моята Валентинка, БЕБ??? 😽💖</h1>
+
+  <div class="gallery">
+    <img id="photo" src="photo1.jpg">
+  </div>
+
+  <button id="yes">Да 💖</button>
+  <button id="no">Не 🙄</button>
+</div>
+
+<script>
+  /* 🎵 autoplay fallback за мобилни */
+  const music = document.getElementById("music");
+  music.play().catch(() => {
+    document.body.addEventListener("click", () => music.play(), { once: true });
+  });
+
+  /* 📸 8 СНИМКИ */
+  const photos = [
+    "photo1.jpg",
+    "photo2.jpg",
+    "photo3.jpg",
+    "photo4.jpg",
+    "photo5.jpg",
+    "photo6.jpg",
+    "photo7.jpg",
+    "photo8.jpg"
+  ];
+
+  const noBtn = document.getElementById("no");
+  let clicks = 0;
+
+  const specialTexts = {
+    3: "Верно ли пак ще цъкнеш? 😳",
+    5: "Усещам, че ме искаш за валентинка 😏",
+    6: "Няма – НЕ 😈",
+    8: "Цъкни ДА! 💖"
+  };
+
+  noBtn.addEventListener("click", () => {
+    clicks++;
+
+    /* смяна на снимка */
+    if (clicks <= photos.length) {
+      document.getElementById("photo").src = photos[clicks - 1];
+    }
+
+    /* местене на бутона */
+    const x = Math.random() * (window.innerWidth - 120);
+    const y = Math.random() * (window.innerHeight - 120);
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+
+    /* специални моменти */
+    if (specialTexts[clicks]) {
+      noBtn.textContent = specialTexts[clicks];
+    }
+
+    /* уголемяване на 3-ти път */
+    if (clicks === 3) {
+      noBtn.style.transform = "scale(1.15)";
+    } else {
+      noBtn.style.transform = "scale(1)";
+    }
+
+    /* след 8-мия път */
+    if (clicks >= 8) {
+      noBtn.disabled = true;
+      noBtn.style.opacity = "0.6";
+    }
+  });
+
+  /* 💖 YES */
+  document.getElementById("yes").addEventListener("click", () => {
+    document.body.innerHTML = `
+      <h1 style="color:white; font-size:30px; padding:20px;">
+        💖 YESSS! 💖<br><br>
+        Ти вече си моята Валентинка, БЕБ 😽<br><br>
+        Обичам те безкрайно ❤️
+      </h1>
+    `;
+  });
+
+  /* ❤️ Падащи сърца */
+  setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = 3 + Math.random() * 5 + "s";
+    heart.style.fontSize = 14 + Math.random() * 26 + "px";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 8000);
+  }, 300);
+</script>
+
+</body>
+</html>
