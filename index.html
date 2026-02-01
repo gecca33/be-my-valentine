@@ -116,16 +116,18 @@ document.addEventListener("DOMContentLoaded", () => {
     8: "Цъкни ДА! 💖"
   };
 
-  // безопасно местене на НЕ
+  // безопасно местене на НЕ, никога не излиза извън екрана
   function moveNoButton() {
     const padding = 20;
     const btnWidth = noBtn.offsetWidth;
     const btnHeight = noBtn.offsetHeight;
+
+    // изчисляваме координатите така че бутонът да е в рамките на екрана
     const maxX = window.innerWidth - btnWidth - padding;
     const maxY = window.innerHeight - btnHeight - padding;
 
-    const x = Math.random() * maxX + padding;
-    const y = Math.random() * maxY + padding;
+    const x = Math.random() * (maxX - padding) + padding;
+    const y = Math.random() * (maxY - padding) + padding;
 
     noBtn.style.position = "absolute";
     noBtn.style.left = x + "px";
@@ -134,13 +136,14 @@ document.addEventListener("DOMContentLoaded", () => {
     noBtn.style.pointerEvents = "auto";
   }
 
-  // първоначално позициониране на НЕ
+  // първоначално позициониране
   moveNoButton();
 
   // клик на НЕ
   noBtn.addEventListener("click", () => {
     clicks++;
     if (clicks <= photos.length) img.src = photos[clicks - 1];
+
     moveNoButton();
 
     if (messages[clicks]) noBtn.textContent = messages[clicks];
@@ -152,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
       noBtn.disabled = true;
       noBtn.style.opacity = "0.6";
       yesBtn.style.pointerEvents = "auto";
-      yesBtn.classList.add("pulse");
+      yesBtn.classList.add("pulse"); // активира пулсиране на ДА
     }
   });
 
@@ -185,4 +188,3 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
-
